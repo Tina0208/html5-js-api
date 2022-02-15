@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .box {
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background-color: rgb(252, 230, 230);
+        border: black solid 1px;
+      }
+      .ball {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background-color: #5d5dfd;
+        border: black solid 1px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 50px;
+        color: white;
+        user-select: none; /*文字不會被反白*/
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <div class="ball">1</div>
+      <div class="ball" style="background-color: pink; left: 70px">2</div>
+      <div class="ball" style="background-color: yellow; left: 140px">3</div>
+    </div>
+
+    <script src="javascripts/jquery-3.4.1.js"></script>
+
+    <script>
+      //   let dragTarget = null; // 拖拉的對象
+      let dragTarget = {
+        t: null,
+        dx: 0,
+        dy: 0,
+      };
+      const box = $(".box");
+
+      const MDown = function (event) {
+        const t = $(event.target);
+        console.log(t);
+        if (t.hasClass("ball")) {
+          dragTarget.t = t;
+          dragTarget.dx = event.offsetX;
+          dragTarget.dy = event.offsetY;
+          console.log(dragTarget.dx);
+          console.log(dragTarget.t);
+          box.on("mousemove", MMove);
+        }
+      };
+      const MUp = function () {
+        dragTarget.t = null;
+        box.off("mousemove", MMove);
+      };
+      const MMove = function () {
+        if (!dragTarget.t) return;
+        dragTarget.t.css({
+          left: event.pageX - dragTarget.dx + "px",
+          top: event.pageY - dragTarget.dy + "px",
+        });
+      };
+
+      box.on("mousedown", MDown);
+      $(window).on("mouseup", MUp);
+    </script>
+  </body>
+</html>
